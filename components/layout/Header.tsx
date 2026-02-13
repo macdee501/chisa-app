@@ -4,7 +4,7 @@ import React from 'react'
 export default function Header() {
   return (
     <View>
-      <Text>Header</Text>
+      <Text className='text-xl text-blue-500'>Header</Text>
     </View>
   )
 }
