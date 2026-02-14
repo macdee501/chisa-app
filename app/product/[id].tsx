@@ -2,12 +2,16 @@ import { useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { Stack, useLocalSearchParams, router } from "expo-router";
 import { MENU_ITEMS } from "@/data/menuItems";
+import { useCart } from "@/store/useCart";
 
 const money = (n: number) => `R ${n.toFixed(2)}`;
 
 export default function ProductModal() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const item = MENU_ITEMS.find((x) => x.id === id);
+  const addItem = useCart((s) => s.addItem);
+const alreadyQty = useCart((s) => s.getQty(item?.id ?? ""));
+const isInCart = alreadyQty > 0;
 
   const [qty, setQty] = useState(1);
 
@@ -106,11 +110,21 @@ export default function ProductModal() {
           </Pressable>
         </View>
 
-        <Pressable className="h-14 items-center justify-center rounded-2xl bg-yellow-500">
-          <Text className="text-base font-extrabold tracking-wide text-black">
-            ADD TO ORDER  •  {money(total)}
-          </Text>
-        </Pressable>
+        <Pressable
+  onPress={() => {
+    if (isInCart) {
+      router.push("/order");
+      return;
+    }
+    addItem(item, qty);
+  }}
+  className="h-14 items-center justify-center rounded-2xl bg-yellow-500"
+>
+  <Text className="text-base font-extrabold tracking-wide text-black">
+    {isInCart ? "VIEW ORDER" : `ADD TO ORDER  •  ${money(total)}`}
+  </Text>
+</Pressable>
+
       </View>
     </View>
   );

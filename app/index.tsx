@@ -38,6 +38,7 @@ export default function Home() {
       ref={scrollRef} 
       showsVerticalScrollIndicator={false}
       scrollEventThrottle={16}
+      contentContainerStyle={{ paddingBottom: 110 }}
       onScroll={(e)=>{
         const y = e.nativeEvent.contentOffset.y;
     setShowScrollTop(y > 500);
@@ -58,8 +59,8 @@ export default function Home() {
           }}
         />
 
-        <Footer />
       </ScrollView>
+        <Footer />
       {showScrollTop ? (
   <Pressable
     onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}

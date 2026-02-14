@@ -3,6 +3,7 @@ import { View, Text, Pressable } from "react-native";
 import { MENU_ITEMS, type MenuItem } from "@/data/menuItems";
 import { CATEGORIES } from "@/data/categories";
 import { router } from "expo-router";
+import { useCart } from "@/store/useCart";
 
 type Props = {
   registerSection: (categoryId: string, y: number) => void;
@@ -56,29 +57,42 @@ export default function MenuSections({ registerSection }: Props) {
 }
 
 function MenuRow({ item }: { item: MenuItem }) {
-  return (
-    <Pressable className="flex-row items-center justify-between py-5 border-b border-black/10"
-    onPress={()=>router.push(`/product/${item.id}`)}
-    >
-      <View className="flex-1 pr-4">
-        <Text className="text-lg font-semibold">{item.name}</Text>
-
-        {item.description ? (
-          <Text className="mt-1 text-sm text-black/60" numberOfLines={2}>
-            {item.description}
+    const qtyInCart = useCart((s) => s.getQty(item.id));
+  
+    return (
+      <Pressable
+        className="flex-row items-center justify-between py-5 border-b border-black/10"
+        onPress={() => router.push(`/product/${item.id}`)}
+      >
+        <View className="flex-1 pr-4">
+          <View className="flex-row items-center gap-3">
+            <Text className="text-lg font-semibold">{item.name}</Text>
+  
+            {qtyInCart > 0 ? (
+              <View className="h-7 min-w-[28px] items-center justify-center rounded-md bg-yellow-500 px-2">
+                <Text className="text-sm font-extrabold text-black">
+                  {qtyInCart}
+                </Text>
+              </View>
+            ) : null}
+          </View>
+  
+          {item.description ? (
+            <Text className="mt-1 text-sm text-black/60" numberOfLines={2}>
+              {item.description}
+            </Text>
+          ) : null}
+  
+          <Text className="mt-2 text-base font-semibold">
+            R {item.priceFrom.toFixed(2)} +
           </Text>
-        ) : null}
-
-        <Text className="mt-2 text-base font-semibold">
-          R {item.priceFrom.toFixed(2)} +
-        </Text>
-      </View>
-
-      {/* image placeholder (right) */}
-      <View
-        className="h-20 w-20 rounded-xl bg-black/5"
-        style={{ backgroundColor: item.imageColor ?? "#E5E7EB" }}
-      />
-    </Pressable>
-  );
-}
+        </View>
+  
+        <View
+          className="h-20 w-20 rounded-xl bg-black/5"
+          style={{ backgroundColor: item.imageColor ?? "#E5E7EB" }}
+        />
+      </Pressable>
+    );
+  }
+  
