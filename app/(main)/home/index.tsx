@@ -3,19 +3,22 @@ import { ScrollView, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
+import { DrawerActions } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
+
 import HomeHeader from "@/components/home/HomeHeader";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import SearchMenu from "@/components/home/SearchMenu";
 import Footer from "@/components/layout/Footer";
-import SideDrawer from "@/components/home/SideDrawer";
 import MenuSections from "@/components/home/MenuSections";
 
 import { useMenuNav } from "@/store/useMenuNav";
 
 export default function Home() {
   const [mode, setMode] = useState<"deliver" | "collect">("deliver");
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const navigation = useNavigation();
 
   const scrollRef = useRef<ScrollView>(null);
   const sectionY = useRef<Record<string, number>>({});
@@ -34,20 +37,20 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView 
-      ref={scrollRef} 
-      showsVerticalScrollIndicator={false}
-      scrollEventThrottle={16}
-      contentContainerStyle={{ paddingBottom: 110 }}
-      onScroll={(e)=>{
-        const y = e.nativeEvent.contentOffset.y;
-    setShowScrollTop(y > 500);
-      }}
+      <ScrollView
+        ref={scrollRef}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingBottom: 110 }}
+        onScroll={(e) => {
+          const y = e.nativeEvent.contentOffset.y;
+          setShowScrollTop(y > 500);
+        }}
       >
         <HomeHeader
           mode={mode}
           onChangeMode={setMode}
-          onOpenMenu={() => setDrawerOpen(true)}
+          onOpenMenu={() => navigation.dispatch(DrawerActions.openDrawer())}
         />
 
         <HeroCarousel />
@@ -58,22 +61,19 @@ export default function Home() {
             sectionY.current[id] = y;
           }}
         />
-
       </ScrollView>
-        <Footer />
-      {showScrollTop ? (
-  <Pressable
-    onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}
-    className="absolute bottom-6 right-6 h-14 w-14 items-center justify-center rounded-full bg-white shadow"
-    style={{
-      elevation: 6, // android shadow
-    }}
-  >
-    <Ionicons name="chevron-up" size={26} />
-  </Pressable>
-) : null}
 
-      {drawerOpen ? <SideDrawer onClose={() => setDrawerOpen(false)} /> : null}
+      <Footer />
+
+      {showScrollTop ? (
+        <Pressable
+          onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}
+          className="absolute bottom-6 right-6 h-14 w-14 items-center justify-center rounded-full bg-white shadow"
+          style={{ elevation: 6 }}
+        >
+          <Ionicons name="chevron-up" size={26} />
+        </Pressable>
+      ) : null}
     </SafeAreaView>
   );
 }
