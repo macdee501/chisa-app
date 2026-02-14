@@ -7,7 +7,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack screenOptions={{ headerShown: false }} initialRouteName="index">
+        <Stack.Screen name="index" />
         <Stack.Screen name="(main)" />
         <Stack.Screen name="(modals)" options={{ presentation: "modal" }} />
       </Stack>

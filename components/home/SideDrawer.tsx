@@ -11,9 +11,16 @@ const LINKS = ["Home", "Orders", "Inbox", "Account", "Help", "Contact", "About"]
 type LinkLabel = (typeof LINKS)[number];
 
 // Only wire what exists right now (add more as you create those screens)
-const ROUTES: Partial<Record<LinkLabel, string>> = {
+const ROUTES = {
   Home: "/home",
-};
+  Orders: "/orders",
+  Inbox: "/inbox",
+  Account: "/account",
+  Help: "/help",
+  Contact: "/contact",
+  About: "/about",
+} as const;
+
 
 export default function SideDrawer({ onClose, name }: Props) {
   const handlePress = (label: LinkLabel) => {
