@@ -66,7 +66,7 @@ export default function SearchModal() {
         />
       </View>
 
-      {/* Bottom: footer back button */}
+      {/*  footer back button */}
       <View className="border-t border-black/10 px-4 py-3">
         <Pressable
           onPress={() => router.back()}
