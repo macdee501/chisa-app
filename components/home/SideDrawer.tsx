@@ -7,48 +7,51 @@ type Props = {
   name?: string;
 };
 
-// Map labels to real routes (clean URLs, no group names)
-const LINKS: Array<{ label: string; href: string }> = [
-  { label: "Home", href: "/" },          // app/(main)/index/index.tsx
-  { label: "Orders", href: "/orders" },  // app/(main)/orders/index.tsx (create when ready)
-  { label: "Inbox", href: "/inbox" },    // app/(main)/inbox/index.tsx (create when ready)
-  { label: "Account", href: "/account" },// app/(main)/account/index.tsx
-  { label: "Help", href: "/help" },      // app/(main)/help/index.tsx
-  { label: "Contact", href: "/contact" },// app/(main)/contact/index.tsx
-  { label: "About", href: "/about" },    // app/(main)/about/index.tsx
-];
+const LINKS = ["Home", "Orders", "Inbox", "Account", "Help", "Contact", "About"] as const;
+type LinkLabel = (typeof LINKS)[number];
+
+// Only wire what exists right now (add more as you create those screens)
+const ROUTES: Partial<Record<LinkLabel, string>> = {
+  Home: "/home",
+};
 
 export default function SideDrawer({ onClose, name }: Props) {
-  const go = (href: string) => {
+  const handlePress = (label: LinkLabel) => {
+    const href = ROUTES[label];
+    if (!href) return; // safe: do nothing if not wired yet
     router.navigate(href);
-    onClose(); // close drawer/backdrop after navigating
+    onClose();
   };
 
   return (
     <View className="absolute inset-0 z-50 flex-row">
-      {/* Backdrop */}
       <Pressable onPress={onClose} className="flex-1 bg-black/40" />
 
-      {/* Drawer panel (RIGHT side) */}
       <View className="h-full w-[65%] bg-white px-4 pt-12">
-        {/* Close button aligned RIGHT */}
         <View className="mb-6 flex-row justify-end">
           <Pressable onPress={onClose}>
             <Ionicons name="close" size={26} />
           </Pressable>
         </View>
 
-        {/* Logo placeholder */}
         <View className="mb-6 h-14 w-32 rounded-xl bg-black/10" />
 
-        {/* Links */}
-        {LINKS.map(({ label, href }) => (
-          <Pressable key={href} className="py-3" onPress={() => go(href)}>
-            <Text className="text-base">{label}</Text>
-          </Pressable>
-        ))}
+        {LINKS.map((label) => {
+          const enabled = !!ROUTES[label];
+          return (
+            <Pressable
+              key={label}
+              className="py-3"
+              onPress={() => handlePress(label)}
+              disabled={!enabled}
+            >
+              <Text className={`text-base ${enabled ? "" : "text-black/30"}`}>
+                {label}
+              </Text>
+            </Pressable>
+          );
+        })}
 
-        {/* Footer greeting */}
         <View className="mt-auto pb-6">
           <Text className="text-sm text-black/60">
             {name ? `Hi, ${name}` : "Hi, Guest"}
