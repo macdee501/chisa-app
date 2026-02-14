@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { View, Text, Pressable } from "react-native";
 import { MENU_ITEMS, type MenuItem } from "@/data/menuItems";
 import { CATEGORIES } from "@/data/categories";
+import { router } from "expo-router";
 
 type Props = {
   registerSection: (categoryId: string, y: number) => void;
@@ -36,9 +37,9 @@ export default function MenuSections({ registerSection }: Props) {
     {cat.name.toUpperCase()}
   </Text>
 
-  <Pressable onPress={() => { /* later: open full list screen */ }}>
-    <Text className="text-sm font-semibold text-black/50">See all</Text>
-  </Pressable>
+  <Pressable onPress={() => router.push(`/menu/${cat.id}`)}>
+  <Text className="text-sm font-semibold text-primary">See all</Text>
+</Pressable>
 </View>
 
 
@@ -56,7 +57,9 @@ export default function MenuSections({ registerSection }: Props) {
 
 function MenuRow({ item }: { item: MenuItem }) {
   return (
-    <Pressable className="flex-row items-center justify-between py-5 border-b border-black/10">
+    <Pressable className="flex-row items-center justify-between py-5 border-b border-black/10"
+    onPress={()=>router.push(`/product/${item.id}`)}
+    >
       <View className="flex-1 pr-4">
         <Text className="text-lg font-semibold">{item.name}</Text>
 
