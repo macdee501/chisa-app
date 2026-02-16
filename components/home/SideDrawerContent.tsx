@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import {
   DrawerContentScrollView,
   type DrawerContentComponentProps,
@@ -9,7 +9,6 @@ import {
 const LINKS = ["Home", "Orders", "Inbox", "Account", "Help", "Contact", "About"] as const;
 type LinkLabel = (typeof LINKS)[number];
 
-// Only wire what exists right now (add more as you create those screens)
 const ROUTES = {
   Home: "/home",
   Orders: "/orders",
@@ -25,19 +24,18 @@ type Props = DrawerContentComponentProps & {
 };
 
 export default function SideDrawerContent({ navigation, name }: Props) {
+  const pathname = usePathname();
+
   const handlePress = (label: LinkLabel) => {
     const href = ROUTES[label];
     if (!href) return;
+
     router.navigate(href);
     navigation.closeDrawer();
   };
 
   return (
-    <DrawerContentScrollView
-      contentContainerStyle={{ paddingTop: 0 }}
-      // keep default scroll behavior; styling stays in the panel below
-    >
-      {/* This View is your previous “panel” (w-[65%], white, padding, etc.) */}
+    <DrawerContentScrollView contentContainerStyle={{ paddingTop: 0 }}>
       <View className="h-full bg-white px-4 pt-12">
         <View className="mb-6 flex-row justify-end">
           <Pressable onPress={() => navigation.closeDrawer()}>
@@ -48,15 +46,29 @@ export default function SideDrawerContent({ navigation, name }: Props) {
         <View className="mb-6 h-14 w-32 rounded-xl bg-black/10" />
 
         {LINKS.map((label) => {
-          const enabled = !!ROUTES[label];
+          const href = ROUTES[label]; // ✅ define href here
+          const enabled = !!href;
+
+          const isActive =
+            enabled &&
+            (pathname === href || pathname.startsWith(href + "/"));
+
           return (
             <Pressable
               key={label}
-              className="py-3"
+              className={`py-3 ${
+                isActive ? "rounded-xl bg-black/5 px-2" : ""
+              }`}
               onPress={() => handlePress(label)}
               disabled={!enabled}
             >
-              <Text className={`text-base ${enabled ? "" : "text-black/30"}`}>
+              <Text
+                className={[
+                  "text-base",
+                  enabled ? "" : "text-black/30",
+                  isActive ? "font-semibold" : "",
+                ].join(" ")}
+              >
                 {label}
               </Text>
             </Pressable>

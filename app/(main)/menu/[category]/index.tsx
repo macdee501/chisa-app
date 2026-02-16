@@ -3,6 +3,7 @@ import { View, Text, FlatList, Pressable } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { CATEGORIES } from "@/data/categories";
 import { MENU_ITEMS } from "@/data/menuItems";
+import ScreenHeader from "@/components/layout/ScreenHeader";
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams<{ category: string }>();
@@ -13,7 +14,9 @@ export default function CategoryScreen() {
     : [];
 
   return (
+    
     <View className="flex-1 bg-background">
+      <ScreenHeader />
       <Stack.Screen
         options={{
           title: categoryObj?.name ?? "Menu",
