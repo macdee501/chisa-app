@@ -1,13 +1,25 @@
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 type Props = {
   mode: "deliver" | "collect";
   onChangeMode: (mode: "deliver" | "collect") => void;
   onOpenMenu: () => void;
+  addressLabel?: string;
 };
 
-export default function HomeHeader({ mode, onChangeMode, onOpenMenu }: Props) {
+export default function HomeHeader({
+  mode,
+  onChangeMode,
+  onOpenMenu,
+  addressLabel,
+}: Props) {
+  const router = useRouter();
+
+  const placeholder =
+    mode === "deliver" ? "Enter delivery address" : "Select collection store";
+
   return (
     <View className="bg-white px-4 pt-2 pb-3">
       {/* Row 1 */}
@@ -43,15 +55,28 @@ export default function HomeHeader({ mode, onChangeMode, onOpenMenu }: Props) {
         </Pressable>
       </View>
 
-      {/* Row 2: address input */}
-      <View className="mt-3 flex-row items-center rounded-2xl bg-black/5 px-3 py-2">
+      {/* Row 2: tap to open map */}
+      <Pressable
+        onPress={() =>
+          router.push({
+            pathname: "/(modals)/(shell)/map",
+            params: { mode },
+          })
+        }
+        className="mt-3 flex-row items-center rounded-2xl bg-black/5 px-3 py-2"
+        android_ripple={{ color: "rgba(0,0,0,0.06)" }}
+      >
         <Ionicons name="location-outline" size={18} />
-        <TextInput
-          className="ml-2 flex-1 py-2 text-sm"
-          placeholder={mode === "deliver" ? "Enter delivery address" : "Select collection store"}
-          placeholderTextColor="#666"
-        />
-      </View>
+        <Text
+          className={`ml-2 flex-1 py-2 text-sm ${
+            addressLabel ? "text-black" : "text-[#666]"
+          }`}
+          numberOfLines={1}
+        >
+          {addressLabel ?? placeholder}
+        </Text>
+        <Ionicons name="chevron-forward" size={18} />
+      </Pressable>
     </View>
   );
 }
