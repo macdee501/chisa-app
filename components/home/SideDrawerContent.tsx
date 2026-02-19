@@ -6,7 +6,7 @@ import {
   type DrawerContentComponentProps,
 } from "@react-navigation/drawer";
 
-const LINKS = ["Home", "Orders", "Inbox", "Account", "Help", "Contact", "About"] as const;
+const LINKS = ["Home", "Orders", "Inbox", "Account", "Help", "Contact", "About","Dummy"] as const;
 type LinkLabel = (typeof LINKS)[number];
 
 const ROUTES = {
@@ -17,6 +17,7 @@ const ROUTES = {
   Help: "/help",
   Contact: "/contact",
   About: "/about",
+  Dummy: "/dummy",
 } as const;
 
 type Props = DrawerContentComponentProps & {

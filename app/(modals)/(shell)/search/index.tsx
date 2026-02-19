@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { View, Text, Pressable, TextInput, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-import { CATEGORIES, type Category } from "@/data/categories";
+import { CATEGORIES } from "@/data/categories";
 import { useMenuNav } from "@/store/useMenuNav";
 
 export default function SearchModal() {
   const [query, setQuery] = useState("");
   const requestScrollTo = useMenuNav((s) => s.requestScrollTo);
 
-  const filtered = CATEGORIES.filter((c) =>
-    c.name.toLowerCase().includes(query.trim().toLowerCase())
+  // Option B: keep Steers categories for navigation
+  // If you want to hide "Favourites / Online Deals / Specials" from this list, keep this filter.
+  const searchableCategories = useMemo(
+    () =>
+      CATEGORIES.filter(
+        (c) => !["favourites", "online-deals", "specials"].includes(c.id)
+      ),
+    []
   );
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return searchableCategories;
+    return searchableCategories.filter((c) => c.name.toLowerCase().includes(q));
+  }, [query, searchableCategories]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -25,9 +37,11 @@ export default function SearchModal() {
             value={query}
             onChangeText={setQuery}
             autoFocus
-            placeholder="Search categories"
+            placeholder="Search menu categories"
             placeholderTextColor="#666"
             className="ml-2 flex-1 py-2 text-sm"
+            returnKeyType="search"
+            autoCorrect={false}
           />
         </View>
 
@@ -40,19 +54,25 @@ export default function SearchModal() {
       <FlatList
         data={filtered}
         keyExtractor={(item) => item.id}
-        contentContainerClassName="px-4 py-6"
-        ItemSeparatorComponent={() => <View className="h-4" />}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
+        ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+        keyboardShouldPersistTaps="handled"
+        ListEmptyComponent={
+          <View className="py-10">
+            <Text className="text-center text-black/50">
+              No categories match “{query.trim()}”.
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <Pressable
             onPress={() => {
-              requestScrollTo(item.id); // tell Home what to scroll to
-              router.back(); // close modal
+              requestScrollTo(item.id); // must match MenuSections registerSection(cat.id)
+              router.back();
             }}
             className="py-2"
           >
-            <Text className="text-center text-base text-black/60">
-              {item.name}
-            </Text>
+            <Text className="text-center text-base text-black/60">{item.name}</Text>
           </Pressable>
         )}
       />

@@ -1,24 +1,86 @@
-import { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { View, Text, Pressable, ScrollView, ActivityIndicator, Image } from "react-native";
 import { Stack, useLocalSearchParams, router } from "expo-router";
-import { MENU_ITEMS } from "@/data/menuItems";
 import { useCart } from "@/store/useCart";
+import { DummyProduct, getProduct } from "@/data/api/duumyjson";
+
 
 const money = (n: number) => `R ${n.toFixed(2)}`;
 
 export default function ProductModal() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const item = MENU_ITEMS.find((x) => x.id === id);
+
   const addItem = useCart((s) => s.addItem);
-const alreadyQty = useCart((s) => s.getQty(item?.id ?? ""));
-const isInCart = alreadyQty > 0;
+  const alreadyQty = useCart((s) => s.getQty(id ?? ""));
+  const isInCart = alreadyQty > 0;
 
   const [qty, setQty] = useState(1);
 
-  if (!item) {
+  const [product, setProduct] = useState<DummyProduct | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      try {
+        setError(null);
+        setLoading(true);
+
+        if (!id) throw new Error("Missing product id");
+
+        const p = await getProduct(id);
+        if (!alive) return;
+        setProduct(p);
+      } catch (e: any) {
+        if (!alive) return;
+        console.warn("product load error", e);
+        setError(e?.message ?? "Failed to load product");
+        setProduct(null);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, [id]);
+
+  const total = useMemo(() => (product ? product.price * qty : 0), [product, qty]);
+
+  // Adapter for your cart store (MenuItem-like shape)
+  const cartItem = useMemo(() => {
+    if (!product) return null;
+    return {
+      id: String(product.id),
+      name: product.title,
+      priceFrom: product.price,
+      description: product.description,
+    };
+  }, [product]);
+
+  if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
+        <Stack.Screen options={{ headerShown: false, presentation: "modal" }} />
+        <ActivityIndicator size="large" />
+        <Text className="mt-3 text-sm text-black/60">Loading…</Text>
+      </View>
+    );
+  }
+
+  if (!product || !cartItem) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white px-6">
+        <Stack.Screen options={{ headerShown: false, presentation: "modal" }} />
+
         <Text className="text-lg font-semibold">Item not found</Text>
+        {!!error && (
+          <Text className="mt-2 text-center text-sm text-black/60">{error}</Text>
+        )}
+
         <Pressable
           onPress={() => router.back()}
           className="mt-4 rounded-2xl bg-black px-4 py-3"
@@ -29,65 +91,47 @@ const isInCart = alreadyQty > 0;
     );
   }
 
-  const total = item.priceFrom * qty;
-
   return (
     <View className="flex-1 bg-white">
       <Stack.Screen
-  options={{
-    title: "",
-    presentation: "modal",
-    headerShown: false, // Steers-style: no header, just floating X
-  }}
-/>
-<Pressable
-  onPress={() => router.back()}
-  className="absolute right-4 top-4 z-50 h-11 w-11 items-center justify-center rounded-full bg-white"
-  style={{ elevation: 6 }} // Android shadow
->
-  <Text className="text-xl">✕</Text>
-</Pressable>
+        options={{
+          title: "",
+          presentation: "modal",
+          headerShown: false,
+        }}
+      />
 
-
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 140 }}
+      {/* Floating close */}
+      <Pressable
+        onPress={() => router.back()}
+        className="absolute right-4 top-4 z-50 h-11 w-11 items-center justify-center rounded-full bg-white"
+        style={{ elevation: 6 }}
       >
+        <Text className="text-xl">✕</Text>
+      </Pressable>
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }}>
         {/* Image */}
-        <View
-          className="mx-4 mt-4 h-44 rounded-3xl"
-          style={{ backgroundColor: item.imageColor ?? "#E5E7EB" }}
+        <Image
+          source={{ uri: product.thumbnail }}
+          className="mx-4 mt-4 h-44 rounded-3xl bg-black/5"
+          resizeMode="cover"
         />
 
         {/* Title */}
         <View className="px-4 pt-5">
           <Text className="text-3xl font-extrabold text-black/90">
-            {item.name.toUpperCase()}
+            {product.title.toUpperCase()}
           </Text>
 
-          {!!item.description && (
+          {!!product.description && (
             <Text className="mt-2 text-base text-black/60">
-              {item.description}
+              {product.description}
             </Text>
           )}
 
-          <Text className="mt-4 text-lg font-bold">
-            From {money(item.priceFrom)}
-          </Text>
+          <Text className="mt-4 text-lg font-bold">{money(product.price)}</Text>
         </View>
-
-        {/* 
-          🚀 FUTURE: Dynamic Option Groups
-          
-          Later we can:
-          - Attach optionGroups to each MenuItem
-          - Or fetch item options from an API
-          - Render radio/checkbox groups here
-          - Adjust total price based on selections
-          
-          For demo purposes, keeping it simple.
-        */}
       </ScrollView>
 
       {/* Sticky Bottom Bar */}
@@ -111,20 +155,19 @@ const isInCart = alreadyQty > 0;
         </View>
 
         <Pressable
-  onPress={() => {
-    if (isInCart) {
-      router.push("/order");
-      return;
-    }
-    addItem(item, qty);
-  }}
-  className="h-14 items-center justify-center rounded-2xl bg-yellow-500"
->
-  <Text className="text-base font-extrabold tracking-wide text-black">
-    {isInCart ? "VIEW ORDER" : `ADD TO ORDER  •  ${money(total)}`}
-  </Text>
-</Pressable>
-
+          onPress={() => {
+            if (isInCart) {
+              router.push("/order");
+              return;
+            }
+            addItem(cartItem as any, qty);
+          }}
+          className="h-14 items-center justify-center rounded-2xl bg-yellow-500"
+        >
+          <Text className="text-base font-extrabold tracking-wide text-black">
+            {isInCart ? "VIEW ORDER" : `ADD TO ORDER  •  ${money(total)}`}
+          </Text>
+        </Pressable>
       </View>
     </View>
   );
