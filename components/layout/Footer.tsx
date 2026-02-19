@@ -34,10 +34,8 @@ export default function StickyFooterBar() {
         </Pressable>
       ) : (
         <Pressable
-          onPress={() => {
-            // demo: no auth yet
-            // later: router.push("/login")
-          }}
+          onPress={() => () => router.push("/auth")
+          }
           className="h-14 items-center justify-center rounded-2xl bg-yellow-500"
         >
           <Text className="text-base font-extrabold tracking-wide text-black">

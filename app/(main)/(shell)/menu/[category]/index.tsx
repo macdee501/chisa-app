@@ -1,9 +1,13 @@
-// app/menu/[category].tsx
+// app/(main)/(shell)/menu/[category].tsx  (or app/menu/[category].tsx depending on your structure)
 import { View, Text, FlatList, Pressable } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+
 import { CATEGORIES } from "@/data/categories";
 import { MENU_ITEMS } from "@/data/menuItems";
 import ScreenHeader from "@/components/layout/ScreenHeader";
+
+const money = (n: number) => `R ${n.toFixed(2)}`;
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams<{ category: string }>();
@@ -14,8 +18,7 @@ export default function CategoryScreen() {
     : [];
 
   return (
-    
-    <View className="flex-1 bg-background">
+    <View className="flex-1 bg-white">
       <ScreenHeader />
       <Stack.Screen
         options={{
@@ -25,46 +28,97 @@ export default function CategoryScreen() {
 
       {!categoryObj ? (
         <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-lg font-semibold text-foreground">
+          <Text className="text-2xl font-extrabold text-black/80">
             Category not found
+          </Text>
+          <Text className="mt-2 text-center text-black/60">
+            The category you’re looking for doesn’t exist.
           </Text>
 
           <Pressable
             onPress={() => router.back()}
-            className="mt-4 rounded-2xl bg-foreground px-4 py-3"
+            className="mt-6 h-12 items-center justify-center rounded-2xl bg-black px-5"
           >
-            <Text className="font-semibold text-background">Go back</Text>
+            <Text className="font-semibold text-white">Go back</Text>
           </Pressable>
         </View>
       ) : (
         <FlatList
           data={items}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ padding: 16, gap: 12 }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ padding: 16, paddingBottom: 28 }}
+          ListHeaderComponent={
+            <View className="pb-4">
+              <Text className="text-4xl font-extrabold tracking-wide text-black/80">
+                {categoryObj.name.toUpperCase()}
+              </Text>
+              <Text className="mt-2 text-base text-black/50">
+                Choose an item to customize and add to your order.
+              </Text>
+
+              <View className="mt-5 h-[1px] bg-black/10" />
+            </View>
+          }
           ListEmptyComponent={
-            <View className="py-10">
-              <Text className="text-center text-muted-foreground">
+            <View className="py-16 items-center">
+              <Text className="text-base font-semibold text-black/70">
+                Nothing here yet
+              </Text>
+              <Text className="mt-2 text-center text-black/50">
                 No items in this category yet.
               </Text>
+
+              <Pressable
+                onPress={() => router.back()}
+                className="mt-6 h-12 items-center justify-center rounded-2xl bg-black px-5"
+              >
+                <Text className="font-semibold text-white">Back to menu</Text>
+              </Pressable>
             </View>
           }
           renderItem={({ item }) => (
-            <Pressable className="rounded-2xl border border-border bg-card p-4">
-              <View className="flex-row items-start justify-between gap-4">
+            <Pressable
+              onPress={() => router.push(`/product/${item.id}`)}
+              className="mb-3 rounded-3xl border border-black/10 bg-white p-4"
+              style={{ elevation: 2 }}
+            >
+              <View className="flex-row items-start gap-4">
+                {/* Left: name + description */}
                 <View className="flex-1">
-                  <Text className="text-base font-semibold text-foreground">
+                  <Text className="text-lg font-semibold text-black/90">
                     {item.name}
                   </Text>
+
                   {!!item.description && (
-                    <Text className="mt-1 text-sm text-muted-foreground">
+                    <Text className="mt-1 text-sm text-black/60" numberOfLines={2}>
                       {item.description}
                     </Text>
                   )}
+
+                  <View className="mt-3 flex-row items-center gap-2">
+                    <View className="rounded-full bg-yellow-500 px-3 py-1">
+                      <Text className="text-xs font-extrabold text-black">
+                        FROM {money(item.priceFrom)}
+                      </Text>
+                    </View>
+
+                    <Text className="text-xs text-black/40">
+                      Tap to view options
+                    </Text>
+                  </View>
                 </View>
 
-                <Text className="text-sm font-semibold text-foreground">
-                  From R{item.priceFrom.toFixed(2)}
-                </Text>
+                {/* Right: mini image placeholder + chevron */}
+                <View className="items-end">
+                  <View
+                    className="h-16 w-16 rounded-2xl bg-black/5"
+                    style={{ backgroundColor: item.imageColor ?? "#E5E7EB" }}
+                  />
+                  <View className="mt-3 h-7 w-7 items-center justify-center rounded-full bg-black/5">
+                    <Ionicons name="chevron-forward" size={16} />
+                  </View>
+                </View>
               </View>
             </Pressable>
           )}
