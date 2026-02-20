@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function DeliveryCard({
   addressTitle,
@@ -14,9 +14,9 @@ export default function DeliveryCard({
     <>
       <View className="px-4 mt-4 flex-row items-center justify-between">
         <Text className="text-lg font-extrabold tracking-wide">DELIVERY</Text>
-        <Pressable onPress={() => {}} hitSlop={10}>
+        <TouchableOpacity onPress={() => {}} hitSlop={10}>
           <Text className="text-sm text-amber-600">Switch to collect</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <View className="mx-4 mt-3 rounded-2xl bg-black/5 px-4 py-3">
@@ -51,9 +51,9 @@ export default function DeliveryCard({
             </View>
           </View>
 
-          <Pressable onPress={() => {}} hitSlop={10}>
+          <TouchableOpacity onPress={() => {}} hitSlop={10}>
             <Text className="text-sm text-amber-600">Change</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </>

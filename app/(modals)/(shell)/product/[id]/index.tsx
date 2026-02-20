@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { Stack, useLocalSearchParams, router } from "expo-router";
 import { MENU_ITEMS } from "@/data/menuItems";
 import { useCart } from "@/store/useCart";
+import { router, Stack, useLocalSearchParams } from "expo-router";
+import { useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const money = (n: number) => `R ${n.toFixed(2)}`;
 
@@ -19,12 +19,12 @@ const isInCart = alreadyQty > 0;
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <Text className="text-lg font-semibold">Item not found</Text>
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.back()}
           className="mt-4 rounded-2xl bg-black px-4 py-3"
         >
           <Text className="text-white font-semibold">Close</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -40,13 +40,13 @@ const isInCart = alreadyQty > 0;
     headerShown: false, // Steers-style: no header, just floating X
   }}
 />
-<Pressable
+<TouchableOpacity
   onPress={() => router.back()}
   className="absolute right-4 top-4 z-50 h-11 w-11 items-center justify-center rounded-full bg-white"
   style={{ elevation: 6 }} // Android shadow
 >
   <Text className="text-xl">✕</Text>
-</Pressable>
+</TouchableOpacity>
 
 
 
@@ -93,24 +93,24 @@ const isInCart = alreadyQty > 0;
       {/* Sticky Bottom Bar */}
       <View className="absolute bottom-0 left-0 right-0 border-t border-black/10 bg-white px-4 pb-5 pt-3">
         <View className="flex-row items-center justify-center gap-6 pb-3">
-          <Pressable
+          <TouchableOpacity
             onPress={() => setQty((q) => Math.max(1, q - 1))}
             className="h-12 w-12 items-center justify-center rounded-full bg-black/5"
           >
             <Text className="text-2xl font-semibold">−</Text>
-          </Pressable>
+          </TouchableOpacity>
 
           <Text className="text-xl font-bold">{qty}</Text>
 
-          <Pressable
+          <TouchableOpacity
             onPress={() => setQty((q) => q + 1)}
             className="h-12 w-12 items-center justify-center rounded-full bg-black/5"
           >
             <Text className="text-2xl font-semibold">+</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
-        <Pressable
+        <TouchableOpacity
   onPress={() => {
     if (isInCart) {
       router.push("/order");
@@ -123,7 +123,7 @@ const isInCart = alreadyQty > 0;
   <Text className="text-base font-extrabold tracking-wide text-black">
     {isInCart ? "VIEW ORDER" : `ADD TO ORDER  •  ${money(total)}`}
   </Text>
-</Pressable>
+</TouchableOpacity>
 
       </View>
     </View>

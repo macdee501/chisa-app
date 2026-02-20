@@ -1,6 +1,6 @@
-import { View, Text, Pressable } from "react-native";
-import { router } from "expo-router";
 import { useCart } from "@/store/useCart";
+import { router } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const money = (n: number) => `R ${n.toFixed(2)}`;
 
@@ -14,7 +14,7 @@ export default function StickyFooterBar() {
   return (
     <View className="absolute bottom-0 left-0 right-0 bg-white px-4 pb-5 pt-3">
       {hasOrder ? (
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.push("/order")}
           className="h-14 flex-row items-center justify-between rounded-2xl bg-yellow-500 px-4"
         >
@@ -31,9 +31,9 @@ export default function StickyFooterBar() {
           <Text className="text-base font-extrabold text-black">
             {money(total)}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       ) : (
-        <Pressable
+        <TouchableOpacity
           onPress={() => () => router.push("/auth")
           }
           className="h-14 items-center justify-center rounded-2xl bg-yellow-500"
@@ -41,7 +41,7 @@ export default function StickyFooterBar() {
           <Text className="text-base font-extrabold tracking-wide text-black">
             LOGIN OR SIGN UP
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       )}
     </View>
   );

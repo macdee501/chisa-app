@@ -1,7 +1,7 @@
-import { View, Text, Pressable } from "react-native";
+import { useCheckout, type PaymentMethod } from "@/store/useCheckout";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useCheckout, type PaymentMethod } from "@/store/useCheckout";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function PaymentMethodModal() {
   const paymentMethod = useCheckout((s) => s.paymentMethod);
@@ -15,13 +15,13 @@ export default function PaymentMethodModal() {
   return (
     <View className="flex-1 bg-white px-4 pt-4">
       <View className="flex-row justify-end">
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.back()}
           className="h-10 w-10 items-center justify-center rounded-full bg-black/5"
           hitSlop={10}
         >
           <Ionicons name="close" size={20} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <Text className="mt-2 text-3xl font-extrabold tracking-wide">PAYMENT</Text>
@@ -30,7 +30,7 @@ export default function PaymentMethodModal() {
         OTHER PAYMENT METHODS
       </Text>
 
-      <Pressable
+      <TouchableOpacity
         onPress={() => choose("card")}
         className="mt-4 flex-row items-center justify-between border-b border-black/10 py-4"
       >
@@ -41,9 +41,9 @@ export default function PaymentMethodModal() {
         {paymentMethod === "card" ? (
           <Ionicons name="checkmark" size={20} color="#d97706" />
         ) : null}
-      </Pressable>
+      </TouchableOpacity>
 
-      <Pressable
+      <TouchableOpacity
         onPress={() => choose("cash")}
         className="flex-row items-center justify-between border-b border-black/10 py-4"
       >
@@ -54,15 +54,15 @@ export default function PaymentMethodModal() {
         {paymentMethod === "cash" ? (
           <Ionicons name="checkmark" size={20} color="#d97706" />
         ) : null}
-      </Pressable>
+      </TouchableOpacity>
 
       <View className="mt-auto pb-6">
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.back()}
           className="h-14 items-center justify-center rounded-xl bg-amber-500"
         >
           <Text className="text-base font-extrabold tracking-wide">BACK</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

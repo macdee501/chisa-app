@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { View, Text, Pressable, TextInput, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useState } from "react";
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { CATEGORIES, type Category } from "@/data/categories";
+import { CATEGORIES } from "@/data/categories";
 import { useMenuNav } from "@/store/useMenuNav";
 
 export default function SearchModal() {
@@ -31,9 +31,9 @@ export default function SearchModal() {
           />
         </View>
 
-        <Pressable onPress={() => router.back()} hitSlop={10}>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={10}>
           <Text className="text-sm font-semibold">Cancel</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       {/* Middle: category list */}
@@ -43,7 +43,7 @@ export default function SearchModal() {
         contentContainerClassName="px-4 py-6"
         ItemSeparatorComponent={() => <View className="h-4" />}
         renderItem={({ item }) => (
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               requestScrollTo(item.id); // tell Home what to scroll to
               router.back(); // close modal
@@ -53,18 +53,18 @@ export default function SearchModal() {
             <Text className="text-center text-base text-black/60">
               {item.name}
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         )}
       />
 
       {/* Bottom: back button like Steers */}
       <View className="border-t border-black/10 px-4 py-3">
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.back()}
           className="items-center rounded-2xl bg-yellow-500 py-4"
         >
           <Text className="text-base font-semibold text-black">BACK</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

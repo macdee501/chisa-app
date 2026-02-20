@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { ScrollView, Pressable } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useRef, useState } from "react";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 
-import HomeHeader from "@/components/home/HomeHeader";
 import HeroCarousel from "@/components/home/HeroCarousel";
+import HomeHeader from "@/components/home/HomeHeader";
+import MenuSections from "@/components/home/MenuSections";
 import SearchMenu from "@/components/home/SearchMenu";
 import Footer from "@/components/layout/Footer";
-import MenuSections from "@/components/home/MenuSections";
 
 import { useMenuNav } from "@/store/useMenuNav";
 
@@ -66,13 +66,13 @@ export default function Home() {
       <Footer />
 
       {showScrollTop ? (
-        <Pressable
+        <TouchableOpacity
           onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}
           className="absolute bottom-6 right-6 h-14 w-14 items-center justify-center rounded-full bg-white shadow"
           style={{ elevation: 6 }}
         >
           <Ionicons name="chevron-up" size={26} />
-        </Pressable>
+        </TouchableOpacity>
       ) : null}
     </SafeAreaView>
   );

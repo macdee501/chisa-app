@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { View, Text, Pressable } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useRef, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import MapView, { Marker, Region } from "react-native-maps";
 
 export default function MapModal() {
   const router = useRouter();
@@ -41,16 +41,16 @@ export default function MapModal() {
             {mode === "collect" ? "Choose collection store" : "Choose delivery address"}
           </Text>
 
-          <Pressable onPress={() => router.back()} hitSlop={10}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={10}>
             <Text className="text-sm font-semibold">Close</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Footer confirm overlay */}
       <View className="absolute bottom-0 left-0 right-0 px-4 pb-6">
         <View className="rounded-2xl bg-white border border-black/10 p-3">
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               // for now just log; later we’ll store + return
               console.log("Confirmed location:", pin);
@@ -59,7 +59,7 @@ export default function MapModal() {
             className="h-12 items-center justify-center rounded-xl bg-black"
           >
             <Text className="text-white font-semibold">Confirm</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

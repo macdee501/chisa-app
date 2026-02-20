@@ -1,10 +1,10 @@
-import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { router, usePathname } from "expo-router";
 import {
-  DrawerContentScrollView,
-  type DrawerContentComponentProps,
+    DrawerContentScrollView,
+    type DrawerContentComponentProps,
 } from "@react-navigation/drawer";
+import { router, usePathname } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const LINKS = ["Home", "Orders", "Inbox", "Account", "Help", "Contact", "About"] as const;
 type LinkLabel = (typeof LINKS)[number];
@@ -38,9 +38,9 @@ export default function SideDrawerContent({ navigation, name }: Props) {
     <DrawerContentScrollView contentContainerStyle={{ paddingTop: 0 }}>
       <View className="h-full bg-white px-4 pt-12">
         <View className="mb-6 flex-row justify-end">
-          <Pressable onPress={() => navigation.closeDrawer()}>
+          <TouchableOpacity onPress={() => navigation.closeDrawer()}>
             <Ionicons name="close" size={26} />
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         <View className="mb-6 h-14 w-32 rounded-xl bg-black/10" />
@@ -54,7 +54,7 @@ export default function SideDrawerContent({ navigation, name }: Props) {
             (pathname === href || pathname.startsWith(href + "/"));
 
           return (
-            <Pressable
+            <TouchableOpacity
               key={label}
               className={`py-3 ${
                 isActive ? "rounded-xl bg-black/5 px-2" : ""
@@ -71,7 +71,7 @@ export default function SideDrawerContent({ navigation, name }: Props) {
               >
                 {label}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           );
         })}
 

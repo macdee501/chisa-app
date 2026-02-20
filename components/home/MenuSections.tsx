@@ -1,9 +1,9 @@
-import { useMemo, useRef } from "react";
-import { View, Text, Pressable } from "react-native";
-import { MENU_ITEMS, type MenuItem } from "@/data/menuItems";
 import { CATEGORIES } from "@/data/categories";
-import { router } from "expo-router";
+import { MENU_ITEMS, type MenuItem } from "@/data/menuItems";
 import { useCart } from "@/store/useCart";
+import { router } from "expo-router";
+import { useMemo } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   registerSection: (categoryId: string, y: number) => void;
@@ -38,9 +38,9 @@ export default function MenuSections({ registerSection }: Props) {
     {cat.name.toUpperCase()}
   </Text>
 
-  <Pressable onPress={() => router.push(`/menu/${cat.id}`)}>
+  <TouchableOpacity onPress={() => router.push(`/menu/${cat.id}`)}>
   <Text className="text-sm font-semibold text-primary">See all</Text>
-</Pressable>
+</TouchableOpacity>
 </View>
 
 
@@ -60,7 +60,7 @@ function MenuRow({ item }: { item: MenuItem }) {
     const qtyInCart = useCart((s) => s.getQty(item.id));
   
     return (
-      <Pressable
+      <TouchableOpacity
         className="flex-row items-center justify-between py-5 border-b border-black/10"
         onPress={() => router.push(`/product/${item.id}`)}
       >
@@ -92,7 +92,7 @@ function MenuRow({ item }: { item: MenuItem }) {
           className="h-20 w-20 rounded-xl bg-black/5"
           style={{ backgroundColor: item.imageColor ?? "#E5E7EB" }}
         />
-      </Pressable>
+      </TouchableOpacity>
     );
   }
   

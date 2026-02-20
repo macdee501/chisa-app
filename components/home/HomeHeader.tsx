@@ -1,6 +1,6 @@
-import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   mode: "deliver" | "collect";
@@ -26,37 +26,37 @@ export default function HomeHeader({
       <View className="flex-row items-center justify-between">
         {/* Deliver / Collect toggle */}
         <View className="flex-row rounded-full bg-black/5 p-1">
-          <Pressable
+          <TouchableOpacity
             onPress={() => onChangeMode("deliver")}
             className={`rounded-full px-4 py-2 ${mode === "deliver" ? "bg-white" : ""}`}
           >
             <Text className={`text-sm ${mode === "deliver" ? "font-semibold" : ""}`}>
               Deliver
             </Text>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             onPress={() => onChangeMode("collect")}
             className={`rounded-full px-4 py-2 ${mode === "collect" ? "bg-white" : ""}`}
           >
             <Text className={`text-sm ${mode === "collect" ? "font-semibold" : ""}`}>
               Collect
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         {/* Right side icons */}
-        <Pressable
+        <TouchableOpacity
           onPress={onOpenMenu}
           className="ml-2 h-10 w-10 items-center justify-center rounded-full bg-black/5"
           hitSlop={10}
         >
           <Ionicons name="menu" size={22} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       {/* Row 2: tap to open map */}
-      <Pressable
+      <TouchableOpacity
         onPress={() =>
           router.push({
             pathname: "/(modals)/(shell)/map",
@@ -76,7 +76,7 @@ export default function HomeHeader({
           {addressLabel ?? placeholder}
         </Text>
         <Ionicons name="chevron-forward" size={18} />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function PlaceOrderBar({
   total,
@@ -11,7 +11,7 @@ export default function PlaceOrderBar({
 }) {
   return (
     <View className="absolute bottom-0 left-0 right-0 bg-amber-500 px-4 py-4">
-      <Pressable
+      <TouchableOpacity
         onPress={onPlaceOrder}
         className="flex-row items-center justify-between rounded-xl"
       >
@@ -22,7 +22,7 @@ export default function PlaceOrderBar({
         <Text className="text-base font-extrabold tracking-wide">PLACE ORDER</Text>
 
         <Text className="text-base font-extrabold">{`R ${total.toFixed(2)}`}</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }

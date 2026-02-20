@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from "react-native";
 import type { Category } from "@/data/categories";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   category: Category;
@@ -8,7 +8,7 @@ type Props = {
 
 export default function CategoryCard({ category, onPress }: Props) {
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={() => onPress?.(category)}
       className="mr-3 w-28 overflow-hidden rounded-2xl bg-black/5"
     >
@@ -21,6 +21,6 @@ export default function CategoryCard({ category, onPress }: Props) {
       <View className="p-3">
         <Text className="text-sm font-semibold">{category.name}</Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }

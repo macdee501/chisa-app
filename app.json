@@ -19,12 +19,13 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.macdee501.chisaapp"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png",
-      "bundler":"metro"
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
@@ -44,6 +45,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7c27fe2b-946f-4594-a63e-5265dd231f3b"
+      }
     }
   }
 }

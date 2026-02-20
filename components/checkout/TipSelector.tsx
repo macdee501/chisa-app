@@ -1,5 +1,5 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
 import { useCheckout, type TipOption } from "@/store/useCheckout";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function TipSelector({ subtotal }: { subtotal: number }) {
   const tip = useCheckout((s) => s.tip);
@@ -28,7 +28,7 @@ export default function TipSelector({ subtotal }: { subtotal: number }) {
             o === 0 ? "No Tip" : `${o}%\nR ${(subtotal * (o / 100)).toFixed(2)}`;
 
           return (
-            <Pressable
+            <TouchableOpacity
               key={o}
               onPress={() => setTip(o)}
               className={[
@@ -39,7 +39,7 @@ export default function TipSelector({ subtotal }: { subtotal: number }) {
               <Text className={`text-center text-sm ${selected ? "font-bold" : ""}`}>
                 {label}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>

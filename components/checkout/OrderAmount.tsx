@@ -1,5 +1,4 @@
-import { View, Text, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Text, View } from "react-native";
 
 export default function OrderAmount({
   subtotal,
@@ -21,10 +20,10 @@ export default function OrderAmount({
         <Row label="Delivery Fee" value={`R ${deliveryFee.toFixed(2)}`} />
         <Row label="Driver Tip" value={`R ${tipAmount.toFixed(2)}`} />
 
-        {/* <Pressable onPress={() => {}} className="mt-3 flex-row items-center">
+        {/* <TouchableOpacity onPress={() => {}} className="mt-3 flex-row items-center">
           <Ionicons name="gift-outline" size={18} color="#d97706" />
           <Text className="ml-2 text-base text-amber-600">Add Voucher or wiCode</Text>
-        </Pressable> */}
+        </TouchableOpacity> */}
 
         <View className="mt-4 flex-row items-center justify-between">
           <Text className="text-lg font-semibold">Total</Text>

@@ -1,11 +1,11 @@
 // app/(main)/(shell)/menu/[category].tsx  (or app/menu/[category].tsx depending on your structure)
-import { View, Text, FlatList, Pressable } from "react-native";
-import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Stack, router, useLocalSearchParams } from "expo-router";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
+import ScreenHeader from "@/components/layout/ScreenHeader";
 import { CATEGORIES } from "@/data/categories";
 import { MENU_ITEMS } from "@/data/menuItems";
-import ScreenHeader from "@/components/layout/ScreenHeader";
 
 const money = (n: number) => `R ${n.toFixed(2)}`;
 
@@ -35,12 +35,12 @@ export default function CategoryScreen() {
             The category you’re looking for doesn’t exist.
           </Text>
 
-          <Pressable
+          <TouchableOpacity
             onPress={() => router.back()}
             className="mt-6 h-12 items-center justify-center rounded-2xl bg-black px-5"
           >
             <Text className="font-semibold text-white">Go back</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       ) : (
         <FlatList
@@ -69,16 +69,16 @@ export default function CategoryScreen() {
                 No items in this category yet.
               </Text>
 
-              <Pressable
+              <TouchableOpacity
                 onPress={() => router.back()}
                 className="mt-6 h-12 items-center justify-center rounded-2xl bg-black px-5"
               >
                 <Text className="font-semibold text-white">Back to menu</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           }
           renderItem={({ item }) => (
-            <Pressable
+            <TouchableOpacity
               onPress={() => router.push(`/product/${item.id}`)}
               className="mb-3 rounded-3xl border border-black/10 bg-white p-4"
               style={{ elevation: 2 }}
@@ -120,7 +120,7 @@ export default function CategoryScreen() {
                   </View>
                 </View>
               </View>
-            </Pressable>
+            </TouchableOpacity>
           )}
         />
       )}

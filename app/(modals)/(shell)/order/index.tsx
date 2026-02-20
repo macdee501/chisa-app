@@ -1,8 +1,8 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { Stack, router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { useCart } from "@/store/useCart";
 import { useCheckout } from "@/store/useCheckout";
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, router } from "expo-router";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const money = (n: number) => `R ${n.toFixed(2)}`;
 
@@ -42,16 +42,16 @@ export default function OrderScreen() {
 
       {/* Top Bar */}
       <View className="flex-row items-center px-4 pt-2">
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.back()}
           className="h-10 w-10 items-center justify-center rounded-full bg-black/5"
           hitSlop={10}
         >
           <Ionicons name="arrow-back" size={20} />
-        </Pressable>
+        </TouchableOpacity>
 
         <Text className="ml-3 text-base font-semibold text-black/60">
-          Steers Orkney
+          Chisa Kanana
         </Text>
       </View>
 
@@ -93,31 +93,31 @@ export default function OrderScreen() {
                       {money(l.unitPrice * l.qty)}
                     </Text>
 
-                    <Pressable
+                    <TouchableOpacity
                       onPress={() => setQty(l.itemId, 0)}
                       className="mt-2 h-9 w-9 items-center justify-center rounded-full bg-black/5"
                       hitSlop={10}
                     >
                       <Ionicons name="trash-outline" size={18} />
-                    </Pressable>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
             ))}
 
             {/* Add Item */}
-            <Pressable onPress={() => router.back()} className="px-4 py-5">
+            <TouchableOpacity onPress={() => router.back()} className="px-4 py-5">
               <Text className="text-base font-semibold text-yellow-600">
                 + Add Item
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         )}
       </ScrollView>
 
       {/* Bottom Checkout Bar */}
       <View className="absolute bottom-0 left-0 right-0 bg-white px-4 pb-5 pt-3">
-        <Pressable
+        <TouchableOpacity
           className="h-14 flex-row items-center justify-between rounded-2xl bg-yellow-500 px-4"
           onPress={goToCheckout}
           disabled={!canCheckout}
@@ -136,7 +136,7 @@ export default function OrderScreen() {
           <Text className="text-base font-extrabold text-black">
             {money(subtotal)}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

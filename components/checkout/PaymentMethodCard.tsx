@@ -1,7 +1,7 @@
-import { View, Text, Pressable } from "react-native";
+import { useCheckout } from "@/store/useCheckout";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useCheckout } from "@/store/useCheckout";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function PaymentMethodCard() {
   const paymentMethod = useCheckout((s) => s.paymentMethod);
@@ -17,12 +17,12 @@ export default function PaymentMethodCard() {
       <View className="flex-row items-center justify-between">
         <Text className="text-xl font-extrabold tracking-wide">PAYMENT METHOD</Text>
 
-        <Pressable onPress={() => router.push("/payment-method")} hitSlop={10}>
+        <TouchableOpacity onPress={() => router.push("/payment-method")} hitSlop={10}>
           <Text className="text-sm text-amber-600">Change</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
-      <Pressable
+      <TouchableOpacity
         onPress={() => router.push("/payment-method")}
         className="mt-4 rounded-2xl bg-black/5 px-4 py-4 flex-row items-center"
       >
@@ -32,7 +32,7 @@ export default function PaymentMethodCard() {
           <Text className="text-sm text-black/60">{subtitle}</Text>
         </View>
         <Ionicons name="chevron-forward" size={18} />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }

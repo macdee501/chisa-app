@@ -1,13 +1,13 @@
 import { HERO_SLIDES, HeroSlide } from "@/data/slide";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  Dimensions,
-  Pressable,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
+    Dimensions,
+    FlatList,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -66,7 +66,7 @@ export default function HeroCarousel() {
           setTimeout(() => setIsPaused(false), 1500);
         }}
         renderItem={({ item }) => (
-          <Pressable
+          <TouchableOpacity
             onPress={() => {}}
             className="h-44 rounded-2xl overflow-hidden"
             style={{ width: cardWidth, backgroundColor: item.color }}
@@ -82,7 +82,7 @@ export default function HeroCarousel() {
                 </Text>
               ) : null}
             </View>
-          </Pressable>
+          </TouchableOpacity>
         )}
       />
 

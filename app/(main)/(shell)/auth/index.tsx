@@ -1,6 +1,6 @@
-import { View, Text, Pressable } from "react-native";
-import { Stack, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Stack, router } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function AuthScreen() {
   return (
@@ -21,12 +21,12 @@ export default function AuthScreen() {
           in the full release.
         </Text>
 
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.back()}
           className="mt-8 h-12 items-center justify-center rounded-2xl bg-black px-6"
         >
           <Text className="font-semibold text-white">Go Back</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

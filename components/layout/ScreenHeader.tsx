@@ -1,7 +1,7 @@
-import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation, usePathname } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const TITLE_BY_ROUTE: Record<string, string> = {
   "/orders": "Orders",
@@ -28,13 +28,13 @@ export default function ScreenHeader() {
       <View className="flex-row items-center justify-between">
         <Text className="text-base font-semibold">{title}</Text>
 
-        <Pressable
+        <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
           className="h-10 w-10 items-center justify-center rounded-full bg-black/5"
           hitSlop={10}
         >
           <Ionicons name="menu" size={22} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

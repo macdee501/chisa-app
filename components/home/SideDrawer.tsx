@@ -1,6 +1,6 @@
-import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   onClose: () => void;
@@ -32,13 +32,13 @@ export default function SideDrawer({ onClose, name }: Props) {
 
   return (
     <View className="absolute inset-0 z-50 flex-row">
-      <Pressable onPress={onClose} className="flex-1 bg-black/40" />
+      <TouchableOpacity onPress={onClose} className="flex-1 bg-black/40" />
 
       <View className="h-full w-[65%] bg-white px-4 pt-12">
         <View className="mb-6 flex-row justify-end">
-          <Pressable onPress={onClose}>
+          <TouchableOpacity onPress={onClose}>
             <Ionicons name="close" size={26} />
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         <View className="mb-6 h-14 w-32 rounded-xl bg-black/10" />
@@ -46,7 +46,7 @@ export default function SideDrawer({ onClose, name }: Props) {
         {LINKS.map((label) => {
           const enabled = !!ROUTES[label];
           return (
-            <Pressable
+            <TouchableOpacity
               key={label}
               className="py-3"
               onPress={() => handlePress(label)}
@@ -55,7 +55,7 @@ export default function SideDrawer({ onClose, name }: Props) {
               <Text className={`text-base ${enabled ? "" : "text-black/30"}`}>
                 {label}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           );
         })}
 
